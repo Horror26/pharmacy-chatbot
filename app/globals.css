@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 160 30% 20%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 160 30% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 160 30% 20%;
+
+    --primary: 160 84% 39%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 160 30% 96%;
+    --secondary-foreground: 160 30% 20%;
+
+    --muted: 160 20% 96%;
+    --muted-foreground: 160 20% 40%;
+
+    --accent: 160 40% 90%;
+    --accent-foreground: 160 30% 20%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 160 20% 90%;
+    --input: 160 20% 90%;
+    --ring: 160 84% 39%;
+
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 160 30% 8%;
+    --foreground: 160 20% 98%;
+
+    --card: 160 30% 12%;
+    --card-foreground: 160 20% 98%;
+
+    --popover: 160 30% 12%;
+    --popover-foreground: 160 20% 98%;
+
+    --primary: 160 84% 39%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 160 30% 20%;
+    --secondary-foreground: 160 20% 98%;
+
+    --muted: 160 30% 20%;
+    --muted-foreground: 160 20% 70%;
+
+    --accent: 160 30% 25%;
+    --accent-foreground: 160 20% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 160 20% 98%;
+
+    --border: 160 30% 20%;
+    --input: 160 30% 20%;
+    --ring: 160 84% 39%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2322c55e' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+}
+
+/* Healthcare-specific styles */
+.health-icon {
+  @apply text-primary;
+}
+
+.health-gradient {
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.9), hsl(var(--primary) / 0.6));
+}
+
+.health-card {
+  @apply bg-white/95 backdrop-blur-sm shadow-lg border border-green-50 rounded-lg;
+}
+
+.health-pattern {
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%2322c55e' fill-opacity='0.05'%3E%3Cpath d='M0 38.59l2.83-2.83 1.41 1.41L1.41 40H0v-1.41zM0 20.83l2.83-2.83 1.41 1.41L1.41 22.24H0v-1.41zM0 3.07l2.83-2.83 1.41 1.41L1.41 4.48H0V3.07zM17.76 40l2.83-2.83 1.41 1.41L19.17 40h-1.41zM17.76 22.24l2.83-2.83 1.41 1.41L19.17 22.24h-1.41zM17.76 4.48l2.83-2.83 1.41 1.41L19.17 4.48h-1.41zM35.52 40l2.83-2.83 1.41 1.41L36.93 40h-1.41zM35.52 22.24l2.83-2.83 1.41 1.41L36.93 22.24h-1.41zM35.52 4.48l2.83-2.83 1.41 1.41L36.93 4.48h-1.41zM1.41 19.17l2.83 2.83-1.41 1.41L0 20.59v-1.41h1.41zM19.17 19.17l2.83 2.83-1.41 1.41-2.83-2.83v-1.41h1.41zM36.93 19.17l2.83 2.83-1.41 1.41-2.83-2.83v-1.41h1.41zM1.41 36.93l2.83 2.83-1.41 1.41L0 38.35v-1.41h1.41zM19.17 36.93l2.83 2.83-1.41 1.41-2.83-2.83v-1.41h1.41zM36.93 36.93l2.83 2.83-1.41 1.41-2.83-2.83v-1.41h1.41zM1.41 1.41l2.83 2.83-1.41 1.41L0 2.83V1.41h1.41zM19.17 1.41l2.83 2.83-1.41 1.41-2.83-2.83V1.41h1.41zM36.93 1.41l2.83 2.83-1.41 1.41-2.83-2.83V1.41h1.41z'%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
