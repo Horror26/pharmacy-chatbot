@@ -152,7 +152,7 @@ export function MedicineSearch({ onSelect }: { onSelect: (medicine: Medicine) =>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className={`font-medium ${medicine.stock > 0 ? "text-green-600" : "text-red-600"}`}>
-                    ${medicine.price.toFixed(2)}
+                  ₹{medicine.price.toFixed(2)}
                   </span>
                   <span className={`text-xs ${medicine.stock > 0 ? "text-green-600" : "text-red-600"}`}>
                     {medicine.stock > 0 ? "In Stock" : "Out of Stock"}

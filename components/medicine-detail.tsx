@@ -79,8 +79,8 @@ export function MedicineDetail({
             </div>
           </div>
           <div className="text-right">
-            <div className="text-2xl font-bold text-primary">${medicine.price.toFixed(2)}</div>
-            <div className="text-sm text-muted-foreground">
+            <div className="text-2xl font-bold text-primary">₹{medicine.price.toFixed(2)}</div>
+            <div className="text-sm text-muted-foreground"> 
               {medicine.stock > 0 ? `${medicine.stock} units available` : "Currently unavailable"}
             </div>
           </div>

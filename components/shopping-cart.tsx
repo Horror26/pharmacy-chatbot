@@ -124,7 +124,7 @@ export function ShoppingCartComponent() {
                       <div>
                         <p className="font-medium">{item.name}</p>
                         <p className="text-sm text-muted-foreground">
-                          ${item.price.toFixed(2)} × {item.quantity}
+                        ₹{item.price.toFixed(2)} × {item.quantity}
                         </p>
                       </div>
                       <div className="flex items-center gap-1">
@@ -162,7 +162,7 @@ export function ShoppingCartComponent() {
             <CardFooter className="flex-col gap-2 border-t pt-4">
               <div className="flex justify-between w-full">
                 <span className="font-medium">Total:</span>
-                <span className="font-bold">${totalPrice.toFixed(2)}</span>
+                <span className="font-bold">₹{totalPrice.toFixed(2)}</span>
               </div>
               <Button
                 className="w-full bg-gradient-to-r from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600"

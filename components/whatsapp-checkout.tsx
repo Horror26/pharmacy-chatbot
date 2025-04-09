@@ -39,7 +39,7 @@ export function WhatsAppCheckout({
 
     // Create order message for WhatsApp
     const itemsList = cartItems
-      .map((item) => `${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}`)
+      .map((item) => `${item.name} x${item.quantity} - ₹${(item.price * item.quantity).toFixed(2)}`)
       .join("\n")
 
     const message = `
@@ -52,7 +52,7 @@ export function WhatsAppCheckout({
 *Order Items*:
 ${itemsList}
 
-*Total*: $${totalPrice.toFixed(2)}
+*Total*: ₹${totalPrice.toFixed(2)}
 
 *Notes*: ${notes || "None"}
 ---------------------------
@@ -140,13 +140,13 @@ ${itemsList}
                   <span>
                     {item.name} × {item.quantity}
                   </span>
-                  <span>${(item.price * item.quantity).toFixed(2)}</span>
+                  <span>₹{(item.price * item.quantity).toFixed(2)}</span>
                 </li>
               ))}
             </ul>
             <div className="border-t mt-2 pt-2 flex justify-between font-medium">
               <span>Total</span>
-              <span>${totalPrice.toFixed(2)}</span>
+              <span>₹{totalPrice.toFixed(2)}</span>
             </div>
           </div>
         </CardContent>
