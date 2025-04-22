@@ -16,7 +16,10 @@ type Medicine = {
   stock: number
   description: string
   activeIngredient: string
-  alternatives?: string[]
+  manufacturer: string
+  expiryDate: Date
+  batchNumber: string
+  alternatives: string[]
 }
 
 export function MedicineDetail({
@@ -96,6 +99,21 @@ export function MedicineDetail({
             <div>
               <h3 className="text-sm font-medium text-muted-foreground mb-1">Active Ingredient</h3>
               <p className="text-gray-800">{medicine.activeIngredient}</p>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-medium text-muted-foreground mb-1">Manufacturer</h3>
+              <p className="text-gray-800">{medicine.manufacturer}</p>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-medium text-muted-foreground mb-1">Batch Number</h3>
+              <p className="text-gray-800">{medicine.batchNumber}</p>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-medium text-muted-foreground mb-1">Expiry Date</h3>
+              <p className="text-gray-800">{new Date(medicine.expiryDate).toLocaleDateString()}</p>
             </div>
 
             <div>

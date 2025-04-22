@@ -15,7 +15,10 @@ type Medicine = {
   stock: number
   description: string
   activeIngredient: string
-  alternatives?: string[]
+  manufacturer: string
+  expiryDate: Date
+  batchNumber: string
+  alternatives: string[]
 }
 
 type Recommendation = {
@@ -55,35 +58,52 @@ export function MedicineSearch({ onSelect }: { onSelect: (medicine: Medicine) =>
       setSearchResults(medicines)
       setHasSearched(true)
 
-      // If we found exact matches, don't need recommendations
-      if (medicines.some((med) => med.name.toLowerCase() === searchTerm.toLowerCase())) {
+      // Get all medicines to check alternatives
+      const allMedicinesResponse = await fetch('/api/medicines')
+      const allMedicinesData = await allMedicinesResponse.json()
+      const allMedicines = allMedicinesData.medicines || []
+
+      // If we found medicines in stock, no need for recommendations
+      if (medicines.some((med: Medicine) => med.stock > 0)) {
         setRecommendations([])
       } else {
-        // Get AI recommendations
-        try {
-          const recResponse = await fetch("/api/medicine-recommendations", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              query: searchTerm,
-              availableMedicines: medicines,
-            }),
-          })
+        // Check if the search term matches any medicine's alternatives
+        const medicinesWithThisAlternative = allMedicines.filter((med: Medicine) => 
+          med.alternatives?.some((alt: string) => 
+            alt.toLowerCase().includes(searchTerm.toLowerCase())
+          )
+        );
 
-          if (recResponse.ok) {
-            const recData = await recResponse.json()
-            setRecommendations(recData.recommendations || [])
-          }
-        } catch (error) {
-          console.error("Error getting recommendations:", error)
-          setRecommendations([])
+        if (medicinesWithThisAlternative.length > 0) {
+          // If the search term is an alternative, recommend the main medicines that are in stock
+          const recommendations = medicinesWithThisAlternative
+            .filter((med: Medicine) => med.stock > 0)
+            .map((med: Medicine) => ({
+              name: med.name,
+              reason: `This medicine is available as an alternative to ${searchTerm}`
+            }));
+          setRecommendations(recommendations);
+        } else {
+          // If medicines are found but out of stock, show their alternatives that are in stock
+          const alternativesRecommendations = medicines.flatMap((medicine: Medicine) => {
+            // Find medicines that are listed as alternatives and are in stock
+            const inStockAlternatives = allMedicines.filter((med: Medicine) => 
+              medicine.alternatives?.includes(med.name) && med.stock > 0
+            );
+            
+            return inStockAlternatives.map((alt: Medicine) => ({
+              name: alt.name,
+              reason: `In stock alternative for ${medicine.name}`
+            }));
+          });
+          
+          setRecommendations(alternativesRecommendations);
         }
       }
     } catch (error) {
       console.error("Error searching medicines:", error)
       setSearchResults([])
+      setRecommendations([])
     } finally {
       setIsLoading(false)
       setIsLoadingRecommendations(false)
@@ -142,23 +162,55 @@ export function MedicineSearch({ onSelect }: { onSelect: (medicine: Medicine) =>
             {searchResults.map((medicine) => (
               <div
                 key={medicine._id}
-                className="flex justify-between items-center p-3 hover:bg-muted cursor-pointer"
+                className="flex flex-col p-4 hover:bg-muted cursor-pointer border-b last:border-b-0"
                 onClick={() => onSelect(medicine)}
               >
-                <div>
-                  <p className="font-medium">{medicine.name}</p>
-                  <p className="text-sm text-muted-foreground">{medicine.category}</p>
-                  <p className="text-xs text-muted-foreground">{medicine.purpose}</p>
+                <div className="flex justify-between items-start mb-2">
+                  <div className="flex-1">
+                    <p className="font-medium text-lg">{medicine.name}</p>
+                    <p className="text-sm text-muted-foreground">{medicine.category}</p>
+                  </div>
+                  <div className="text-right">
+                    <span className={`font-medium text-lg ${medicine.stock > 0 ? "text-green-600" : "text-red-600"}`}>
+                      ₹{medicine.price.toFixed(2)}
+                    </span>
+                    <div className={`text-sm ${medicine.stock > 0 ? "text-green-600" : "text-red-600"}`}>
+                      {medicine.stock > 0 ? `${medicine.stock} in Stock` : "Out of Stock"}
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className={`font-medium ${medicine.stock > 0 ? "text-green-600" : "text-red-600"}`}>
-                  ₹{medicine.price.toFixed(2)}
-                  </span>
-                  <span className={`text-xs ${medicine.stock > 0 ? "text-green-600" : "text-red-600"}`}>
-                    {medicine.stock > 0 ? "In Stock" : "Out of Stock"}
-                  </span>
-                  <Button variant="outline" size="sm" onClick={() => onSelect(medicine)}>
-                    View
+                
+                <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                  <div>
+                    <span className="text-muted-foreground">Manufacturer:</span> {medicine.manufacturer}
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Active Ingredient:</span> {medicine.activeIngredient}
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Batch:</span> {medicine.batchNumber}
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Expires:</span>{" "}
+                    {new Date(medicine.expiryDate).toLocaleDateString()}
+                  </div>
+                </div>
+                
+                <p className="text-sm mt-2">{medicine.purpose}</p>
+                
+                {medicine.alternatives && medicine.alternatives.length > 0 && (
+                  <div className="mt-2 text-sm">
+                    <span className="text-muted-foreground">Alternatives:</span>{" "}
+                    {medicine.alternatives.join(", ")}
+                  </div>
+                )}
+                
+                <div className="mt-3 flex justify-end">
+                  <Button variant="outline" size="sm" onClick={(e) => {
+                    e.stopPropagation();
+                    onSelect(medicine);
+                  }}>
+                    View Details
                   </Button>
                 </div>
               </div>

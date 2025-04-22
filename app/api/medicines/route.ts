@@ -7,8 +7,8 @@ export async function GET(req: NextRequest) {
     const searchQuery = url.searchParams.get("query")?.toLowerCase() || ""
 
     const client = await clientPromise
-    const db = client.db("healthcare")
-    const medicinesCollection = db.collection("medicines")
+    const db = client.db("pharma")
+    const medicinesCollection = db.collection("inventories")
 
     let medicines
 

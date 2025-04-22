@@ -12,6 +12,12 @@ type CartItem = {
   name: string
   price: number
   quantity: number
+  category: string
+  purpose: string
+  activeIngredient: string
+  manufacturer: string
+  expiryDate: Date
+  batchNumber: string
 }
 
 export function ShoppingCartComponent() {
@@ -96,76 +102,80 @@ export function ShoppingCartComponent() {
         </Button>
 
         {isOpen && (
-          <Card className="absolute right-0 mt-2 w-80 z-50 shadow-lg health-card">
-            <CardHeader className="pb-2 bg-gradient-to-r from-green-600 to-emerald-500 text-white rounded-t-lg">
+          <Card className="absolute right-0 mt-2 w-80 z-50 shadow-lg bg-white">
+            <CardHeader className="pb-3 bg-gradient-to-r from-green-600 to-emerald-500 text-white rounded-t-lg">
               <div className="flex justify-between items-center">
-                <CardTitle className="text-lg">Your Cart</CardTitle>
+                <CardTitle className="text-lg font-semibold">Your Cart</CardTitle>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-white hover:bg-white/20"
+                  className="h-8 w-8 text-white hover:bg-white/20 rounded-full"
                   onClick={() => setIsOpen(false)}
                 >
                   <X className="h-4 w-4" />
                 </Button>
               </div>
             </CardHeader>
-            <CardContent className="max-h-96 overflow-auto">
+            <CardContent className="p-4">
               {cartItems.length === 0 ? (
-                <div className="text-center text-muted-foreground py-8 px-4">
-                  <ShoppingCart className="h-12 w-12 mx-auto mb-2 text-muted-foreground/50" />
-                  <p>Your cart is empty</p>
-                  <p className="text-sm mt-1">Add medicines to get started</p>
+                <div className="text-center text-muted-foreground py-6">
+                  <ShoppingCart className="h-12 w-12 mx-auto mb-3 text-muted-foreground/50" />
+                  <p className="font-medium">Your cart is empty</p>
                 </div>
               ) : (
-                <ul className="space-y-2">
+                <ul className="space-y-4">
                   {cartItems.map((item) => (
-                    <li key={item.id} className="flex justify-between items-center border-b pb-2">
-                      <div>
-                        <p className="font-medium">{item.name}</p>
-                        <p className="text-sm text-muted-foreground">
-                        ₹{item.price.toFixed(2)} × {item.quantity}
-                        </p>
+                    <li key={item.id} className="flex flex-col border-b pb-4">
+                      <div className="flex justify-between items-center mb-2">
+                        <p className="font-medium text-gray-800">{item.name}</p>
+                        <p className="font-medium text-primary">₹{item.price.toFixed(2)}</p>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          className="h-6 w-6"
-                          onClick={() => updateQuantity(item.id, -1)}
-                        >
-                          <Minus className="h-3 w-3" />
-                        </Button>
-                        <span className="w-6 text-center">{item.quantity}</span>
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          className="h-6 w-6"
-                          onClick={() => updateQuantity(item.id, 1)}
-                        >
-                          <Plus className="h-3 w-3" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-6 w-6 text-destructive"
-                          onClick={() => removeFromCart(item.id)}
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </Button>
+                      
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-7 w-7 rounded-full"
+                            onClick={() => updateQuantity(item.id, -1)}
+                          >
+                            <Minus className="h-3 w-3" />
+                          </Button>
+                          <span className="w-8 text-black text-center font-medium">{item.quantity}</span>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-7 w-7 rounded-full"
+                            onClick={() => updateQuantity(item.id, 1)}
+                          >
+                            <Plus className="h-3 w-3" />
+                          </Button>
+                        </div>
+                        
+                        <div className="flex items-center gap-4">
+                          <span className="text-sm font-medium">₹{(item.price * item.quantity).toFixed(2)}</span>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7 text-destructive hover:bg-destructive/10 rounded-full"
+                            onClick={() => removeFromCart(item.id)}
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </Button>
+                        </div>
                       </div>
                     </li>
                   ))}
                 </ul>
               )}
             </CardContent>
-            <CardFooter className="flex-col gap-2 border-t pt-4">
+            <CardFooter className="flex-col gap-3 border-t pt-4 bg-gray-50">
               <div className="flex justify-between w-full">
-                <span className="font-medium">Total:</span>
-                <span className="font-bold">₹{totalPrice.toFixed(2)}</span>
+                <span className="font-medium text-gray-800">Total:</span>
+                <span className="font-bold text-primary">₹{totalPrice.toFixed(2)}</span>
               </div>
               <Button
-                className="w-full bg-gradient-to-r from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600"
+                className="w-full bg-gradient-to-r from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 font-medium"
                 disabled={cartItems.length === 0}
                 onClick={handleCheckout}
               >
